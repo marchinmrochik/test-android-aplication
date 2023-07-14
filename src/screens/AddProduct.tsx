@@ -4,9 +4,12 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImagePicker from 'react-native-image-crop-picker';
-import { ProductValues } from "../types";
+import { ProductValues, StackParamList } from "../types";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const AddProduct = ({ navigation }: { navigation: any }) => {
+type NavigationProp = StackNavigationProp<StackParamList, 'AddProduct'>;
+
+const AddProduct = ({ navigation }: { navigation: NavigationProp }) => {
   const initialValues: ProductValues = { title: '', price: '', description: '' };
   const [image, setImage] = useState<string | null>(null);
 

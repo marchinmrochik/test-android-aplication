@@ -16,7 +16,9 @@ import ProductsList from './src/screens/ProductsList';
 import ProductDetails from './src/screens/ProductDetails';
 import AddProduct from './src/screens/AddProduct';
 
-const Stack = createStackNavigator();
+import { StackParamList } from "./src/types";
+
+const Stack = createStackNavigator<StackParamList>();
 
 const App = () => {
   return (

@@ -10,6 +10,7 @@ export interface Product extends ProductValues {
 }
 
 export type StackParamList = {
+  ProductsList: undefined;
   ProductDetails: { id: string };
   AddProduct: undefined;
 };

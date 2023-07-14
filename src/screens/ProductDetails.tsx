@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Product } from "../types";
+import { Product, StackParamList } from "../types";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from '@react-navigation/stack';
 
-interface Route {
-  params: {
-    id: string;
-  };
-}
+type ProductDetailsScreenRouteProp = RouteProp<StackParamList, 'ProductDetails'>;
 
-const ProductDetails = ({ route }: { route: Route }) => {
+type ProductDetailsScreenNavigationProp = StackNavigationProp<StackParamList, 'ProductDetails'>;
+
+type Props = {
+  route: ProductDetailsScreenRouteProp;
+  navigation: ProductDetailsScreenNavigationProp;
+};
+
+const ProductDetails = ({ route }: Props) => {
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
