@@ -1,11 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchProducts } from '../actions/products';
+import { Product } from "../types";
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
 
 interface ProductsState {
   products: Product[];
@@ -15,8 +11,8 @@ interface ProductsState {
 
 const initialState:ProductsState = {
   products: [],
-    status: 'idle',
-    error: null,
+  status: 'idle',
+  error: null,
 }
 
 const productsSlice = createSlice({
@@ -35,8 +31,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = 'failed';
-        // @ts-ignore
-        state.error = action.error.message;
+        state.error = action.error.message as string;
       });
   },
 });

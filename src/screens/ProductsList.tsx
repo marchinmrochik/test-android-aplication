@@ -1,27 +1,29 @@
-import React, { useEffect } from 'react';
-import { View, Text, FlatList, Image, Button, TouchableOpacity, StyleSheet } from 'react-native';
-import { fetchProducts } from '../actions/products';
+import React, { useEffect } from "react";
+import { Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { fetchProducts } from "../actions/products";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { Product, StackParamList } from "../types";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const ProductsList = ({ navigation }: { navigation: any }) => {
+type NavigationProp = StackNavigationProp<StackParamList, 'ProductDetails'>;
+
+const ProductsList = ({ navigation }: { navigation: NavigationProp }) => {
   const dispatch = useAppDispatch();
   const products = useAppSelector((state) => state.products.products);
   const status = useAppSelector((state) => state.products.status);
   const error = useAppSelector((state) => state.products.error);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    return navigation.addListener('focus', () => {
       dispatch(fetchProducts());
     });
-
-    return unsubscribe;
   }, [navigation]);
 
   const handleProductPress = (id: string) => {
     navigation.navigate('ProductDetails', { id });
   };
 
-  const renderProductItem = ({ item }: { item: any }) => (
+  const renderProductItem = ({item}: {item: Product}) => (
     <TouchableOpacity onPress={() => handleProductPress(item.id)}>
       <View style={styles.productContainer}>
         {
@@ -49,7 +51,7 @@ const ProductsList = ({ navigation }: { navigation: any }) => {
 
   return (
     <View style={styles.container}>
-      <Button title="Добавить товар" onPress={handleAddProduct} />
+      <Button title="Add Product" onPress={handleAddProduct} />
       <FlatList
         data={products}
         renderItem={renderProductItem}

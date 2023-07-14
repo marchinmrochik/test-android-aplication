@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Product } from "../types";
 
-const ProductDetails = ({ route }: { route: any }) => {
-  const [product, setProduct] = useState<any>(null);
+interface Route {
+  params: {
+    id: string;
+  };
+}
+
+const ProductDetails = ({ route }: { route: Route }) => {
+  const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
-    // Получаем информацию о товаре из Async Storage по его id
     const getProductDetails = async () => {
       try {
         const storedProducts = await AsyncStorage.getItem('products');
         const products = storedProducts ? JSON.parse(storedProducts) : [];
 
         const productId = route.params.id;
-        const selectedProduct = products.find((product: any) => product.id === productId);
+        const selectedProduct = products.find((product: Product) => product.id === productId);
 
         if (selectedProduct) {
           setProduct(selectedProduct);
@@ -27,7 +33,7 @@ const ProductDetails = ({ route }: { route: any }) => {
   }, [route.params.id]);
 
   if (!product) {
-    return null; // Можно отобразить загрузочный индикатор или другую заглушку, пока товар загружается
+    return null;
   }
 
   return (

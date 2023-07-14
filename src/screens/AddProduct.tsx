@@ -4,19 +4,19 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImagePicker from 'react-native-image-crop-picker';
-// @ts-ignore
-const AddProduct = ({ navigation }) => {
-  const initialValues = { title: '', price: '', description: '' };
-  const [image, setImage] = useState(null);
+import { ProductValues } from "../types";
+
+const AddProduct = ({ navigation }: { navigation: any }) => {
+  const initialValues: ProductValues = { title: '', price: '', description: '' };
+  const [image, setImage] = useState<string | null>(null);
 
   const validationSchema = yup.object().shape({
-    title: yup.string().required('Введите название товара'),
-    price: yup.number().required('Введите цену товара'),
-    description: yup.string().required('Введите описание товара'),
+    title: yup.string().required('Enter product name'),
+    price: yup.number().required('Enter the price of the item'),
+    description: yup.string().required('Enter product description'),
   });
 
-  // @ts-ignore
-  const handleAddProduct = async (values) => {
+  const handleAddProduct = async (values: ProductValues) => {
     try {
       const storedProducts = await AsyncStorage.getItem('products');
       const products = storedProducts ? JSON.parse(storedProducts) : [];
@@ -49,19 +49,18 @@ const AddProduct = ({ navigation }) => {
     ImagePicker.openPicker({
       mediaType: 'photo',
     }).then((response) => {
-      // @ts-ignore
-      if (!response.didCancel && !response.error) {
-        // @ts-ignore
-        setImage(response.path);
-      }
-    });
+      setImage(response.path);
+    })
+    .catch((error) => {
+      console.error('ImagePicker Error: ', error);
+     });
   };
 
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Название товара"
+        placeholder="Product name"
         onChangeText={formik.handleChange('title')}
         onBlur={formik.handleBlur('title')}
         value={formik.values.title}
@@ -72,7 +71,7 @@ const AddProduct = ({ navigation }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="Цена товара"
+        placeholder="Product price"
         onChangeText={formik.handleChange('price')}
         onBlur={formik.handleBlur('price')}
         value={formik.values.price}
@@ -84,7 +83,7 @@ const AddProduct = ({ navigation }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="Описание товара"
+        placeholder="Product description"
         onChangeText={formik.handleChange('description')}
         onBlur={formik.handleBlur('description')}
         value={formik.values.description}
@@ -95,12 +94,12 @@ const AddProduct = ({ navigation }) => {
       )}
 
       <TouchableOpacity style={styles.button} onPress={handleSelectImage}>
-        <Text style={styles.buttonText}>Выбрать изображение</Text>
+        <Text style={styles.buttonText}>Select image</Text>
       </TouchableOpacity>
 
       {image && <Image source={{ uri: image }} style={styles.image} />}
 
-      <Button title="Добавить товар" onPress={formik.handleSubmit} />
+      <Button title="Add item" onPress={() => formik.handleSubmit()} />
     </View>
   );
 };
